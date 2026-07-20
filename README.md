@@ -12,7 +12,8 @@ regenerate the book's figures and to work through its exercises with fully worke
 |------|------------|
 | `codes_for_figures/` | Scripts that regenerate every figure in the book (`get_fig_*.py`), plus the shared helpers `plot_style.py`, `magic.py`, `qubit_syk.py`. |
 | `codes_for_figures/data/` | Pre-generated numerical data (`.npz`) so the figures reproduce immediately, without recomputing the heavy random-matrix and dynamics runs. |
-| `notebooks/` | 63 solution notebooks, one per exercise, named `solution_ch<N>_<topic>.ipynb`. Each is self-contained: problem statement, worked derivation, and a numerical check. |
+| `solutions_to_exercises/notebooks/` | 63 solution notebooks, one per exercise, named `solution_ch<N>_<topic>.ipynb`. Each is self-contained: problem statement, worked derivation, and a numerical check. |
+| `solutions_to_exercises/scripts/` | The same worked solutions as standalone `.py` scripts, for readers who prefer running them outside a notebook. |
 
 ## Installation
 
@@ -32,7 +33,7 @@ pip install -r requirements-optional.txt
 python codes_for_figures/get_fig_ch4_otoc.py
 
 # open a worked solution
-jupyter lab notebooks/
+jupyter lab solutions_to_exercises/notebooks/
 ```
 
 ## Related
