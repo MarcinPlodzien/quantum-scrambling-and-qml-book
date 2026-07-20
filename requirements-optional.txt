@@ -1,0 +1,8 @@
+# =============================================================================
+# Optional dependency — NOT needed for the notebooks or the core figures.
+# Required only by the tensor-network reservoir figure script:
+#   codes_for_figures/qrc_tensor_networks/qrc_quimb.py
+# quimb is a heavier install; skip it unless you are regenerating that figure.
+#   pip install -r requirements-optional.txt
+# =============================================================================
+quimb>=1.11,<2          # tested 1.11.2

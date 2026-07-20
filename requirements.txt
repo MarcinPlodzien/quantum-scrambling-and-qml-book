@@ -1,0 +1,31 @@
+# =============================================================================
+# In-book code requirements
+# "Quantum Chaos and Information Scrambling: From RMT to QML" (M. Płodzień)
+# -----------------------------------------------------------------------------
+# Covers the code that ships with the manuscript sources:
+#   codes_for_figures/                        (figure-generation scripts)
+#   verify_book/                              (symbolic/numeric verification suite)
+#   textbook_exercises_companion_materials/   (exercise solutions, .py + notebooks)
+#
+# Tested on Python 3.13 with the exact versions noted after each entry.
+# Lower bounds give the tested baseline; upper caps stop a future MAJOR release
+# from silently breaking the code. Optional heavier dependency (one
+# tensor-network figure) is in requirements-optional.txt.
+# =============================================================================
+
+# --- numerics / plotting / symbolic (used throughout) ---
+numpy>=2.1,<3           # tested 2.1.3
+scipy>=1.15,<2          # tested 1.15.3
+matplotlib>=3.10,<4     # tested 3.10.8
+sympy>=1.13,<2          # tested 1.13.3   (symbolic checks in verify_book + solutions)
+scikit-learn>=1.6,<2    # tested 1.6.1    (QML classification / kernel examples)
+
+# --- JAX (OTOC, Krylov, quantum-kernel and reservoir figure scripts) ---
+jax>=0.8,<0.9           # tested 0.8.1
+jaxlib>=0.8,<0.9        # tested 0.8.1
+
+# --- only needed to run the notebooks headless / rebuild figures ---
+jupyter>=1.1,<2         # tested 1.1.1
+nbconvert>=7.16,<8      # tested 7.16.6
+nbformat>=5.10,<6       # tested 5.10.4
+ipykernel>=6.29,<7      # tested 6.29.5
