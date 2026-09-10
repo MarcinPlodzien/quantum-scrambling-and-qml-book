@@ -172,8 +172,10 @@ LAM = 1e-8                        # ridge penalty
 N_TRAIN = 80                      # training inputs, evenly spaced in [0, 2pi]
 N_TEST = 400                      # dense held-out grid
 L_SWEEP = [1, 2, 3, 4, 5, 6, 7, 8]   # re-upload sweep for panel (c): rise (Fourier
-#                                       ceiling LN passes 7) then fall (over-scrambling
-#                                       concentrates the features toward the Haar value)
+#                                       ceiling LN passes 7) then fall (the 10L+1 harmonics
+#                                       outnumber the 33 features from L = 4 on, so the
+#                                       linear readout can no longer resolve them; the
+#                                       features themselves do not concentrate)
 T_SWEEP = [0.15, 0.6]            # weak vs strong per-layer scrambling for panel (c)
 FEATURE_PANEL = ["X0", "Y2", "Z4", "Z0Z1", "Y1"]   # feature curves shown in (a)
 

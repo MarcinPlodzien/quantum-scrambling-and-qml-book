@@ -161,8 +161,11 @@ LBL_BBOX = dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.8)
 panel_label(ax1, "a", loc="upper left", bbox=LBL_BBOX)
 
 # (b) reservoir scrambling: the averaged input-spreading OTOC vs coupling, with the
-#     capacity peak marked. The capacity peak sits on the rising flank of the OTOC:
-#     the edge of scrambling, before the Z-input channel over-mixes.
+#     capacity peak marked. At J = 0 the OTOC already sits at the single-qubit floor
+#     2 sin^2(phi)/N = 0.31 (precession of the input qubit alone), rises to about 0.46
+#     near J/h_x = 1.2, and collapses to about 0.05 at strong coupling because total Z
+#     is then conserved and the input operator cannot spread. The capacity peak sits
+#     near the OTOC maximum; strong coupling is under-scrambled, not over-scrambled.
 ax2.plot(JH, otoc, "s-", color=C_OTOC, ms=4, lw=1.5)
 ax2.axvline(Jh_pk, color="grey", ls="--", lw=0.9)
 ax2.set_xscale("log")

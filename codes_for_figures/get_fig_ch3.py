@@ -291,7 +291,7 @@ def plot_page_curve():
     ax.plot(k_frac,
             N_max * np.minimum(k_frac, 1 - k_frac) * np.log(2),
             'k--', lw=1.5, alpha=0.3,
-            label=r"$S_{\max} = \min(k, N{-}k)\,\ln 2$")
+            label=rf"$S_{{\max}} = {N_max}\,\min(k/N,\,1-k/N)\,\ln 2$  ($N={N_max}$)")
 
     ax.set_xlabel(r"Subsystem fraction $k/N$")
     ax.set_ylabel(r"$\mathbb{E}[S_A]$")

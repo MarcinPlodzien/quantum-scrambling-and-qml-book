@@ -151,7 +151,7 @@ for key, kw in styles.items():
     m, s = series(f"S_{key}")
     ax1.errorbar(Ls, m, yerr=s, capsize=2, lw=1.4, **kw)
 ax1.plot(Ls, (Ls // 2) * np.log(2) - 0.5, ":", color="black", lw=1.0, label="Page")
-ax1.set_xlabel(r"qubits $L$")
+ax1.set_xlabel(r"qubits $N$")
 ax1.set_ylabel(r"half-cut entanglement $S$")
 panel_label(ax1, "a", loc="upper left")
 ax1.legend(loc="lower right")
@@ -161,7 +161,7 @@ for key, kw in styles.items():
     # Connect the points with lines to guide the eye. The residual even-odd wobble
     # in the SYK curves is physical (the N_M = 2L mod 8 symmetry class; see caption).
     ax2.errorbar(Ls, m, yerr=s, capsize=2, lw=1.4, ms=7, **kw)
-ax2.set_xlabel(r"qubits $L$")
+ax2.set_xlabel(r"qubits $N$")
 ax2.set_ylabel(r"Stabilizer Rényi Entropy $M_2$")
 panel_label(ax2, "b", loc="upper left")
 ax2.legend(loc="lower right")

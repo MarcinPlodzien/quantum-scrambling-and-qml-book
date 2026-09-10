@@ -133,8 +133,13 @@ def gap_ratio(E):
 
 
 def b_goe(tau):
+    """GOE form factor, both branches: 2 tau - tau ln(1 + 2 tau) for tau <= 1 and
+    2 - tau ln[(2 tau + 1)/(2 tau - 1)] for tau >= 1 (Mehta), approaching 1 only asymptotically."""
     tau = np.clip(tau, 1e-9, None)
-    return np.where(tau < 1, 2 * tau - tau * np.log(1 + 2 * tau), 1.0)
+    lo = 2 * tau - tau * np.log(1 + 2 * tau)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        hi = 2 - tau * np.log((2 * tau + 1) / (2 * tau - 1))
+    return np.where(tau < 1, lo, hi)
 
 
 def compute():
@@ -205,14 +210,22 @@ apply_book_style()
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4.6), constrained_layout=True)
 
 # panel (a): the RAW form factor, log-log -- a dip falling to the plateau, no ramp
-ax1.loglog(t_raw, K_raw, color="#4361ee", lw=1.1)
+ax1.loglog(t_raw, K_raw, color="#4361ee", lw=0.9, alpha=0.55, label="raw, one spectrum")
+# running geometric mean over neighbouring times: exposes the ramp buried under the
+# order-one fluctuations of a single, non-self-averaging spectrum
+def running_geomean(y, w=15):
+    ly = np.log(np.clip(y, 1e-12, None))
+    m = np.convolve(ly, np.ones(w) / w, mode="same")
+    return np.exp(m)
+ax1.loglog(t_raw[8:-8], running_geomean(K_raw)[8:-8], color="#d62828", lw=1.9, label="running mean")
 ax1.axhline(1.0, color="0.6", ls="--", lw=0.8)
 ax1.set_xlabel(r"time $t$")
 ax1.set_ylabel(r"$K(t)/D$")
-ax1.set_ylim(0.4, 3e3)
+ax1.set_ylim(1e-3, 3e3)
+ax1.legend(loc="lower left", fontsize=9)
 panel_label(ax1, "a", loc="upper right")
-ax1.text(0.28, 0.30, "dip", transform=ax1.transAxes, color="#4361ee")
-ax1.text(0.60, 0.42, "plateau", transform=ax1.transAxes, color="0.45")
+ax1.text(0.22, 0.62, "dip", transform=ax1.transAxes, color="#4361ee")
+ax1.text(0.72, 0.60, "plateau", transform=ax1.transAxes, color="0.45")
 
 # panel (b): connected SFF after resolving the sector + unfolding; a moving
 # average over the disorder-averaged data exposes the ramp under the fluctuations

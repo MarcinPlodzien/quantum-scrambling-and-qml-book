@@ -246,8 +246,10 @@ def plot_combined(data):
 
     # ── Panel (a): Digital ────────────────────────────────────────
     for i, N in enumerate(N_VALUES):
-        # Haar-random baseline: M₂ ≈ N − 2
-        ax1.axhline(N - 2, color=COLORS[i], ls=":", alpha=0.4, lw=1)
+        # Orthogonal-Haar baseline: R_y(pi/4) and CX are real, so the circuit stays in
+        # O(D) and the SRE saturates at M₂ = N − log2(7) ≈ N − 2.81 (Eq. sre_real_haar),
+        # not at the unitary-Haar value N − 2 used in panel (b)
+        ax1.axhline(N - np.log2(7), color=COLORS[i], ls=":", alpha=0.4, lw=1)
         ax1.plot(data[f"dig_depths_N{N}"], data[f"dig_sre_N{N}"],
                  color=COLORS[i], marker=MARKERS[i], ms=6, lw=1.8,
                  markeredgecolor="white", markeredgewidth=0.5,
@@ -264,6 +266,7 @@ def plot_combined(data):
 
     # ── Panel (b): Analog ─────────────────────────────────────────
     for i, N in enumerate(N_VALUES):
+        # unitary-Haar baseline M₂ ≈ N − 2 (complex Hamiltonian evolution)
         ax2.axhline(N - 2, color=COLORS[i], ls=":", alpha=0.4, lw=1)
         ax2.plot(data[f"ana_times_N{N}"], data[f"ana_sre_N{N}"],
                  color=COLORS[i], marker=MARKERS[i], ms=6, lw=1.8,

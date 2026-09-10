@@ -77,7 +77,7 @@ OUTPUT_DIR = SCRIPT_DIR.parent / "figures" / "ch5"
 DATA_DIR = SCRIPT_DIR / "data" / "ch5"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-N_SAMPLES = 1500       # per ensemble
+N_HAAR = 20000         # CUE samples; the Clifford group is enumerated exactly (11520 elements)
 WALK_LEN = 40          # random-walk word length; must exceed the group mixing time
 SEED = 0
 
@@ -91,8 +91,36 @@ CNOT = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]], dtype=
 GENS = [np.kron(H, I2), np.kron(I2, H), np.kron(S, I2), np.kron(I2, S), CNOT]
 
 
+def enumerate_clifford_group():
+    """All 11520 elements of the 2-qubit Clifford group modulo global phase, by breadth-first
+    closure over the generators.  Each element is stored with its global phase fixed so that
+    the first nonzero entry is real and positive, and rounded, so that projectively equal
+    matrices hash to the same key.  Uniform weight on this list is the uniform (counting)
+    measure on the projective group, which is what the text quotes."""
+    def key(U):
+        flat = U.flatten()
+        k = np.argmax(np.abs(flat) > 1e-9)
+        V = U * (np.conj(flat[k]) / np.abs(flat[k]))
+        return tuple(np.round(V, 6).flatten().view(np.float64))
+    start = np.eye(4, dtype=complex)
+    seen = {key(start): start}
+    frontier = [start]
+    while frontier:
+        nxt = []
+        for U in frontier:
+            for G in GENS:
+                V = G @ U
+                kv = key(V)
+                if kv not in seen:
+                    seen[kv] = V
+                    nxt.append(V)
+        frontier = nxt
+    return list(seen.values())
+
+
 def random_clifford(rng, steps=WALK_LEN):
-    """A near-uniform 2-qubit Clifford by a random walk in the generators."""
+    """A near-uniform 2-qubit Clifford by a random walk in the generators (kept for reference;
+    the figure now uses the exact enumeration above)."""
     U = np.eye(4, dtype=complex)
     for _ in range(steps):
         U = GENS[rng.integers(len(GENS))] @ U
@@ -121,8 +149,9 @@ def unfolded_spacings(U):
 
 def compute():
     rng = np.random.default_rng(SEED)
-    cliff = [random_clifford(rng) for _ in range(N_SAMPLES)]
-    haar = [cue(rng) for _ in range(N_SAMPLES)]
+    cliff = enumerate_clifford_group()
+    assert len(cliff) == 11520, len(cliff)
+    haar = [cue(rng) for _ in range(N_HAAR)]
     return {
         "cliff_ph": np.concatenate([eigenphases(U) for U in cliff]),
         "cliff_s": np.concatenate([unfolded_spacings(U) for U in cliff]),
@@ -130,7 +159,7 @@ def compute():
     }
 
 
-data = load_or_compute(DATA_DIR / "fig_ch5_clifford_rigidity.npz", compute)
+data = load_or_compute(DATA_DIR / "fig_ch5_clifford_rigidity_uniform.npz", compute)
 cliff_ph = data["cliff_ph"]
 cliff_s = data["cliff_s"]
 haar_s = data["haar_s"]

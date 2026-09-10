@@ -173,7 +173,7 @@ equally.  We use it because:
         how operators spread under the Hamiltonian.
     (b) It equals the Hilbert-Schmidt inner product ⟨A, B⟩ = Tr(A†B)/D,
         which is the same norm used in operator Krylov complexity
-        (Chapter 4, Sec. 4.5).  This makes the comparison direct.
+        (Chapter 4, Sec. 4.6).  This makes the comparison direct.
     (c) It is the standard convention in the scrambling literature
         (Shenker-Stanford, Maldacena-Shenker-Stanford, Sekino-Susskind).
     (d) It avoids computing thermal partition functions Z = Tr(e^{−βH}),
